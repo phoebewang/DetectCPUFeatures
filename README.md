@@ -1,5 +1,5 @@
 # DetectCPUFeatures
-A simple C++ code to detect all features on you current X86 CPU.
+A simple C++ code to detect all features on your current X86 CPU.
 
 This code requires Clang header cpuid.h. Tested with both Linux (clang++) and Windows (clang-cl). GCC has not been tested.
 
