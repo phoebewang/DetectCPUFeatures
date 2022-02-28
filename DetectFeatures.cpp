@@ -29,12 +29,12 @@ int main() {
       } else if (R == "\%edx ") {
         pREG = &EDX;
       } else {
-        ReadyToParse = false;
+        cerr << "Error parsing REG in " << L << endl;
         continue;
       }
       regex RLeaf("leaf ([0-9a-fx]+)");
       if (!regex_search(L, Result, RLeaf)) {
-        ReadyToParse = false;
+        cerr << "Error parsing Leaf in " << L << endl;
         continue;
       }
       Leaf = stoul(Result[1].str(), nullptr, 0);
