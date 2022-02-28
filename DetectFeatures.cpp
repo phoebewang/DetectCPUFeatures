@@ -18,7 +18,7 @@ int main() {
   bool ReadyToParse = false;
   for (string L; getline(SS, L, '\n');) {
     if (L.substr(0, 12) == "/* Features ") {
-      ReadyToParse = true;
+      ReadyToParse = false;
       string R = L.substr(15, 5);
       if (R == "\%eax ") {
         pREG = &EAX;
@@ -30,13 +30,11 @@ int main() {
         pREG = &EDX;
       } else {
         ReadyToParse = false;
-        cerr << "Error parsing REG in " << L << endl;
         continue;
       }
       regex RLeaf("leaf ([0-9a-fx]+)");
       if (!regex_search(L, Result, RLeaf)) {
         ReadyToParse = false;
-        cerr << "Error parsing Leaf in " << L << endl;
         continue;
       }
       Leaf = stoul(Result[1].str(), nullptr, 0);
@@ -45,10 +43,10 @@ int main() {
       if (!__get_cpuid_count(Leaf, SubLeaf, &EAX, &EBX, &ECX, &EDX)) {
         cerr << "Warning: Leaf " << Leaf << " sub-leaf " << SubLeaf
              << " is not available on this target" << endl;
-        ReadyToParse = false;
         continue;
       }
-    } else if (regex_search(L, Result, RFeature)) {
+      ReadyToParse = true;
+    } else if (ReadyToParse && regex_search(L, Result, RFeature)) {
       if (*pREG & stoul(Result[2].str(), nullptr, 0))
         cout << Result[1].str() << ", ";
     }
